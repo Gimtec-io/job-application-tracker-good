@@ -11,6 +11,15 @@ Followed the setup only for the theme, font and body reset.
 
 DO NOT USE ANY CSS
 
+First I started with Express hello world
+
+https://github.com/goldbergyoni/nodebestpractices
+
+Created first endpoints returning text
+
+Populated the DB
+
+
 ## Bonus features to be added later
 
 Add markdown or WYSIWYW for job description
