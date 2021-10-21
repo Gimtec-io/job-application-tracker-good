@@ -2,21 +2,29 @@
 const faker = require('faker');
 const fs = require('fs');
 const path = require('path');
+const { slugify } = require('../utils');
 
 // Population variables
 const applicationsCount = 5;
 const commentsCountPerApplication = 5;
 const defaultStatuses = ['waiting first response', 'technical call', 'onsite', 'take home project']
 
-const createApplication = (statusId) => ({
-  company: faker.company.companyName(),
-  position: faker.name.jobTitle(),
-  link: faker.internet.url(),
-  statusId: statusId,
-  description: faker.lorem.paragraph(),
-  createdAt: faker.date.recent(),
-  id: faker.datatype.uuid(),
-});
+const createApplication = (statusId) => {
+  const company = faker.company.companyName();
+  const position = faker.name.jobTitle();
+  // I assume faker will not create the same company name and position
+  const slug = `${slugify(company)}-${slugify(position)}`;
+  return {
+    company,
+    position,
+    slug,
+    link: faker.internet.url(),
+    statusId: statusId,
+    description: faker.lorem.paragraph(),
+    createdAt: faker.date.recent(),
+    id: faker.datatype.uuid(),
+  };
+}
 
 const createComment = (applicationId) => ({
   content: faker.lorem.paragraph(),
