@@ -58,14 +58,19 @@ const createComments = (applications) => {
   }, []);
 };
 
+const reduceToDictById = (acc, data) => {
+  acc[data.id] = data;
+  return acc;
+};
+
 const createData = () => {
   const statuses = createStatuses();
   const applications = createApplications(statuses);
   const comments = createComments(applications);
   return {
-    statuses,
-    applications,
-    comments,
+    statuses: statuses.reduce(reduceToDictById, {}),
+    applications: applications.reduce(reduceToDictById, {}),
+    comments: comments.reduce(reduceToDictById, {}),
   };
 };
 
