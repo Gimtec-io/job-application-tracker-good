@@ -1,3 +1,4 @@
+const { v4 } = require('uuid');
 const db = require('./db');
 
 // Static methods should return an Application instance
@@ -14,6 +15,15 @@ class Status {
 
   static async defaultStatus() {
     return db.statuses.getByContent('waiting first response');
+  }
+
+  static async create({ content }) {
+    const newStatus = {
+      id: v4(),
+      content,
+    };
+    await db.statuses.create(newStatus);
+    return newStatus;
   }
 
   constructor({ id, content }) {

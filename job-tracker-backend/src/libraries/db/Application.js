@@ -117,7 +117,7 @@ class Application {
     if (!company || !position || !statusId) {
       // Status 422: Unprocessable Entity
       // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422
-      throw new CustomError('Company and position are required', 422);
+      throw new CustomError('Company, position and status are required', 422);
     }
     try {
       // update DB

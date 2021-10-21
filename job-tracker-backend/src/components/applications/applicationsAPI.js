@@ -1,9 +1,20 @@
 const express = require('express');
 const Application = require('../../libraries/db/Application');
+const Status = require('../../libraries/db/Status');
 
 const router = express.Router();
 
 // Create one
+/*
+  Body example
+  {
+    "company": "Google",
+    "position": "Rockstar developer",
+    "link": "https://www.gimtec.io/",
+    "description": "Do whatever you want, and we pay",
+    "createdAt": "2021-10-21T05:15:58.652Z"
+  }
+*/
 router.post('/', async (req, res) => {
   try {
     const newApplication = await Application.create(req.body);
@@ -37,11 +48,38 @@ router.get('/:slug', async (req, res) => {
 });
 
 // Update one
+/*
+  Body example
+  {
+    "company": "Google",
+    "position": "Rockstar developer",
+    "link": "https://www.gimtec.io/",
+    "description": "new description",
+    "status": {
+        "id": "12f4481b-ba0c-464e-b20d-5ff3df051019",
+        "content": "onsite"
+    }
+  }
+*/
 router.patch('/:id', async (req, res) => {
   try {
-    // PENDING to create new status
     const application = await Application.getById(req.params.id);
-    await application.update(req.body);
+    const statusData = req.body.status;
+    let status;
+    if (statusData.id) {
+      status = await Status.getById(statusData.id);
+    }
+    if (!status) {
+      status = await Status.create({ content: statusData.content });
+    }
+    await application.update({
+      company: req.body.company,
+      description: req.body.description,
+      link: req.body.link,
+      position: req.body.position,
+      statusId: status.id,
+    });
+    application.addStatus(status);
     res.json(application);
   } catch (error) {
     // We rely on custom errors

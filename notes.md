@@ -30,6 +30,12 @@ res.json(application);
 
 They I would implement the methods `getById` and `update`.
 
+I am not a fan of creating ids in the frontend. It's very convenient, but then the frontend knows too much and in case of change in how ids are created it also requires a change in the frontend.
+
+With websites that is not a problem, yet with apps it might be a pproblems. Webistes everybody has the last version. Apps, everybody has a different version, which means that someone might try to create the new entity with the old way of creating ids.
+
+This project does not focus on configuration. Hence, no linting, pre-commit, production config, etc. The project focuses on clean code.
+
 
 ## Bonus features to be added later
 

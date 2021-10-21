@@ -3,7 +3,7 @@ const data = require('./data.json');
 
 const saveData = (newData) => {
   fs.writeFileSync('./src/libraries/db/data.json', JSON.stringify(newData));
-}
+};
 
 const applications = {
   async getAll() {
@@ -30,13 +30,13 @@ const applications = {
     data.applications[id] = updatedData;
     saveData(data);
     return undefined;
-  }
+  },
 };
 
 const comments = {
   async getByApplicationId(applicationId) {
     return Object.values(data.comments).filter((comment) => comment.applicationId === applicationId);
-  }
+  },
 };
 
 const statuses = {
@@ -50,7 +50,13 @@ const statuses = {
 
   async getByContent(content) {
     return Object.values(data.statuses).find((statusData) => statusData.content === content);
-  }
+  },
+
+  async create(newStatus) {
+    data.statuses[newStatus.id] = newStatus;
+    saveData(data);
+    return newStatus;
+  },
 }
 
 module.exports = {
