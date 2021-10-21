@@ -79,7 +79,7 @@ router.patch('/:id', async (req, res) => {
       position: req.body.position,
       statusId: status.id,
     });
-    application.addStatus(status);
+    application.setStatus(status);
     res.json(application);
   } catch (error) {
     // We rely on custom errors

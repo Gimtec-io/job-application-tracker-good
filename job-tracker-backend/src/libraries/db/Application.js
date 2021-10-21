@@ -1,6 +1,7 @@
 const { v4 } = require('uuid');
 const { CustomError } = require('../errors');
 const { slugify } = require('../utils');
+const Comment = require('./Comment');
 const db = require('./db');
 const Status = require('./Status');
 
@@ -12,7 +13,7 @@ class Application {
     const applications = applicationsData.map((data) => new Application(data));
     const applicationsExended = Promise.all(applications.map(async (application) => {
       const status = await Status.getById(application.statusId);
-      application.addStatus(status);
+      application.setStatus(status);
       return application;
     }));
     return applicationsExended;
@@ -25,8 +26,10 @@ class Application {
     }
     const application = new Application(applicationData);
     const status = await Status.getById(application.statusId);
-    application.addStatus(status);
+    application.setStatus(status);
     // TODO: add comments
+    const comments = await Comment.getByApplicationId(application.id);
+    application.setComments(comments);
     return application;
   }
 
@@ -37,8 +40,7 @@ class Application {
     }
     const application = new Application(applicationData);
     const status = await Status.getById(application.statusId);
-    application.addStatus(status);
-    // TODO: add comments
+    application.setStatus(status);
     return application;
   }
 
@@ -82,7 +84,7 @@ class Application {
       }
       await db.applications.create(newApplicationData);
       const newApplication = new Application(newApplicationData);
-      newApplication.addStatus(defaultStatus);
+      newApplication.setStatus(defaultStatus);
       return newApplication;
     } catch (error) {
       console.error('Error creating application');
@@ -103,11 +105,11 @@ class Application {
     this.slug = slug;
   }
 
-  addComments(comments) {
+  setComments(comments) {
     this.comments = comments;
   }
 
-  addStatus(status) {
+  setStatus(status) {
     this.status = status;
   }
 
@@ -157,6 +159,7 @@ class Application {
       status: this.status,
       createdAt: this.createdAt,
       slug: this.slug,
+      comments: this.comments,
     };
   }
 }

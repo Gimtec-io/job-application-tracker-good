@@ -36,7 +36,7 @@ With websites that is not a problem, yet with apps it might be a pproblems. Webi
 
 This project does not focus on configuration. Hence, no linting, pre-commit, production config, etc. The project focuses on clean code.
 
-
+DO NOT UNDERESTIMATE the value of repetition. Build CRUD apps until you feel comfortable with them. It's the bread and butter of web developpment.
 ## Bonus features to be added later
 
 Add markdown or WYSIWYW for job description

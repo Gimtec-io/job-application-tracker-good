@@ -1,7 +1,7 @@
 const { v4 } = require('uuid');
 const db = require('./db');
 
-// Static methods should return an Application instance
+// Static methods should return a Status instance
 class Status {
   static async getAll() {
     const statusesData = await db.statuses.getAll();
