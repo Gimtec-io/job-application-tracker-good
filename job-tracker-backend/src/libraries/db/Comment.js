@@ -9,7 +9,19 @@ class Comment {
   }
 
   static async create({ content, applicationId }) {
-    
+    if (!content || !applicationId) {
+      // Status 422: Unprocessable Entity
+      // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422
+      throw new CustomError('Content and applicationId are required', 422);
+    }
+    const newCommentData = {
+      content,
+      applicationId,
+      createdAt: new Date().toISOString(),
+      id: v4(),
+    };
+    await db.comments.create(newCommentData);
+    return new Comment(newCommentData);
   }
 
   constructor({ id, content, applicationId, createdAt }) {

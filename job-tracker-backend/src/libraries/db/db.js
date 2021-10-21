@@ -37,6 +37,12 @@ const comments = {
   async getByApplicationId(applicationId) {
     return Object.values(data.comments).filter((comment) => comment.applicationId === applicationId);
   },
+
+  async create(newComment) {
+    data.comments[newComment.id] = newComment;
+    saveData(data);
+    return newComment;
+  },
 };
 
 const statuses = {
