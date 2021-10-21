@@ -37,8 +37,16 @@ router.get('/:slug', async (req, res) => {
 });
 
 // Update one
-router.patch('/:id', (req, res) => {
-  res.json('Application updated');
+router.patch('/:id', async (req, res) => {
+  try {
+    // PENDING to create new status
+    const application = await Application.getById(req.params.id);
+    await application.update(req.body);
+    res.json(application);
+  } catch (error) {
+    // We rely on custom errors
+    res.status(error.status || 400).json(error.message || 'Error creating application');
+  }
 });
 
 module.exports = router;

@@ -19,11 +19,24 @@ Created first endpoints returning text
 
 Populated the DB
 
+Sometimes I started with how I wanted my code to read:
+
+```javascript
+// PENDING to create new status
+const application = await Application.getById(req.params.id);
+await application.update(req.body);
+res.json(application);
+```
+
+They I would implement the methods `getById` and `update`.
+
 
 ## Bonus features to be added later
 
 Add markdown or WYSIWYW for job description
 Add tag to each comment to then show all the comments with the same tag.
+Add modified at
+Add the date that the status changed.
 
 ## Application New Page
 

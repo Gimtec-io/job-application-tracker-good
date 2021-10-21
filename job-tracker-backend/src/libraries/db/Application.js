@@ -30,6 +30,18 @@ class Application {
     return application;
   }
 
+  static async getById(id) {
+    const applicationData = await db.applications.getById(id);
+    if (!applicationData) {
+      throw new CustomError(`Application with id ${id}, not found`, 404);
+    }
+    const application = new Application(applicationData);
+    const status = await Status.getById(application.statusId);
+    application.addStatus(status);
+    // TODO: add comments
+    return application;
+  }
+
   // How we create the slug could be up to us or to the user.
   // We could have added an input in the form to create applications.
   static async createNewSlug(company, position, index) {
@@ -97,6 +109,40 @@ class Application {
 
   addStatus(status) {
     this.status = status;
+  }
+
+  // We don't allow to change id, slug or createdAt
+  async update({ company, position, link, description, statusId }) {
+    // Same check when creating plus statusId
+    if (!company || !position || !statusId) {
+      // Status 422: Unprocessable Entity
+      // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422
+      throw new CustomError('Company and position are required', 422);
+    }
+    try {
+      // update DB
+      await db.applications.update(this.id, {
+        company,
+        position,
+        link,
+        description,
+        statusId,
+        id: this.id,
+        createdAt: this.createdAt,
+        slug: this.slug,
+      });
+      // update instance
+      this.company = company;
+      this.position = position;
+      this.link = link;
+      this.description = description;
+      this.statusId = statusId;
+    } catch (error) {
+      console.error('Error updating application');
+      console.error(error);
+      // We suppose an error with the DB
+      throw new CustomError('Sorry, application could not be updated. Try again in a few moments.', 500);;
+    }
   }
 
   // used by JSON.stringify to serialize objects
