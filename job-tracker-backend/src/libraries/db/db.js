@@ -1,4 +1,9 @@
+const fs = require('fs');
 const data = require('./data.json');
+
+const saveData = (newData) => {
+  fs.writeFileSync('./src/libraries/db/data.json', JSON.stringify(newData));
+}
 
 const applications = {
   async getAll() {
@@ -9,10 +14,22 @@ const applications = {
     return Object.values(data.applications).find((application) => application.slug === slug);
   },
 
+  async getById(id) {
+    return data.applications[id];
+  },
+
   async create(newApplication) {
     // A normal DB would also do some checks to ensure consistency.
     data.applications[newApplication.id] = newApplication;
-    return undefined
+    saveData(data);
+    return undefined;
+  },
+
+  async update(id, updatedData) {
+    // A normal DB would also do some checks to ensure consistency.
+    data.applications[id] = updatedData;
+    saveData(data);
+    return undefined;
   }
 };
 
