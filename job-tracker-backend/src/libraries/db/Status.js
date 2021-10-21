@@ -2,6 +2,11 @@ const db = require('./db');
 
 // Static methods should return an Application instance
 class Status {
+  static async getAll() {
+    const statusesData = await db.statuses.getAll();
+    return statusesData.map((statusData) => new Status(statusData));
+  }
+
   static async getById(id) {
     const statusData = await db.statuses.getById(id);
     return new Status(statusData);

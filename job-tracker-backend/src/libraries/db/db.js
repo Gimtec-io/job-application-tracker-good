@@ -23,6 +23,10 @@ const comments = {
 };
 
 const statuses = {
+  async getAll() {
+    return data.statuses;
+  },
+
   async getById(id) {
     return data.statuses.find((statusData) => statusData.id === id);
   },
