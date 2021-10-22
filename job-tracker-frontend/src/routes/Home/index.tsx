@@ -1,24 +1,25 @@
 import { Box } from 'grommet';
-import { useEffect, useState } from 'react';
+import { AnchorLink } from '../../components/AnchorLink';
+import { useQuery } from '../../hooks/useQuery';
+import { Application } from '../../models/applications';
 import { ApplicationsList } from './components/ApplicationsList';
 
 export const Home = () => {
-  const [applications, setApplications] = useState();
+  const { data: applications, error, isLoading } = useQuery<Application[]>('/applications');
+  
+  if (error) {
+    return <div>Error</div>;
+  }
 
-  useEffect(() => {
-    fetch('http://localhost:8000/applications')
-      .then((response) => response.json())
-      .then((applicationsData) => {
-        setApplications(applicationsData);
-      });
-  }, []);
-
-  if (!applications) {
+  if (isLoading || !applications) {
     return <div>Loading...</div>;
   }
 
   return (
-    <Box margin={ { top: 'large' } }>
+    <Box margin={ { top: 'medium' } }>
+      <Box margin={ { bottom: 'medium' } }>
+        <AnchorLink to="/applications/new" label="Create new application" />
+      </Box>
       <ApplicationsList applications={ applications }/>
     </Box>
   );
