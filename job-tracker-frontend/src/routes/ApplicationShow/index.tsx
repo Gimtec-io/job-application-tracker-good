@@ -1,7 +1,7 @@
 import { Anchor, Box, Button, Heading, Layer, Text } from 'grommet';
 import { useState } from 'react';
-import { ApplicationStatus } from '../../components/ApplicationStatus';
-import { NewApplicationComment } from '../../components/NewApplicationComment';
+import { ApplicationStatus } from './components/ApplicationStatus';
+import { NewApplicationComment } from './components/NewApplicationComment';
 
 const application = {
   id: '01',

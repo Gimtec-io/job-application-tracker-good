@@ -34,9 +34,12 @@ I am not a fan of creating ids in the frontend. It's very convenient, but then t
 
 With websites that is not a problem, yet with apps it might be a pproblems. Webistes everybody has the last version. Apps, everybody has a different version, which means that someone might try to create the new entity with the old way of creating ids.
 
-This project does not focus on configuration. Hence, no linting, pre-commit, production config, etc. The project focuses on clean code.
+This project does not focus on configuration. Hence, no linting, pre-commit, production config, typescript in backend etc. The project focuses on clean code.
 
 DO NOT UNDERESTIMATE the value of repetition. Build CRUD apps until you feel comfortable with them. It's the bread and butter of web developpment.
+
+Avoid carets in package versions to make sure the versions are what you expect.
+
 ## Bonus features to be added later
 
 Add markdown or WYSIWYW for job description
