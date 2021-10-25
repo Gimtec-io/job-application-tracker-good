@@ -10,7 +10,10 @@ class Status {
 
   static async getById(id) {
     const statusData = await db.statuses.getById(id);
-    return new Status(statusData);
+    if (statusData) {
+      return new Status(statusData);
+    }
+    return undefined;
   }
 
   static async defaultStatus() {

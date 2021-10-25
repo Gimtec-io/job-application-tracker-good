@@ -82,6 +82,7 @@ router.patch('/:id', async (req, res) => {
     application.setStatus(status);
     res.json(application);
   } catch (error) {
+    console.error(error);
     // We rely on custom errors
     res.status(error.status || 400).json(error.message || 'Error creating application');
   }
