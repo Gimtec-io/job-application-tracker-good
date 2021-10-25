@@ -16,11 +16,11 @@ export const Home = () => {
   }
 
   return (
-    <Box margin={ { top: 'medium' } }>
+    <>
       <Box margin={ { bottom: 'medium' } }>
         <AnchorLink to="/applications/new" label="Create new application" />
       </Box>
       <ApplicationsList applications={ applications }/>
-    </Box>
+    </>
   );
 }

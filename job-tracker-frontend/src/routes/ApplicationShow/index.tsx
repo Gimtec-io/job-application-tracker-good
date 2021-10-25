@@ -1,6 +1,7 @@
 import { Anchor, Box, Button, Heading, Layer, Text } from 'grommet';
 import { useState } from 'react';
 import { useParams } from 'react-router';
+import { AnchorLink } from '../../components/AnchorLink';
 import { useQuery } from '../../hooks/useQuery';
 import { Application, ApplicationStatus } from '../../models/applications';
 import { ApplicationStatuSelector } from './components/ApplicationStatus';
@@ -45,6 +46,7 @@ export const ApplicationShow = () => {
 
   return (
     <>
+      <AnchorLink to="/" label="< Home" />
       <Heading level="2">{ `${application.position} @ ${application.company}` }</Heading>
       <Text>
         { `Application sent ${new Date(application.createdAt).toLocaleDateString()}` }
