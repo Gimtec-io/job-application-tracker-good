@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 type ReturnValue<T> = {
   data?: T,
   error?: string,
   isLoading: boolean,
+  refetch: () => void;
 };
 
 const baseUrl = 'http://localhost:8000';
@@ -15,7 +16,7 @@ export const useQuery = <R>(path: string): ReturnValue<R> => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | undefined>();
 
-  useEffect(() => {
+  const fetchData = useCallback(async () => {
     fetch(`${baseUrl}${path}`)
       .then((response) => {
         if (response.ok) {
@@ -37,9 +38,14 @@ export const useQuery = <R>(path: string): ReturnValue<R> => {
       })
   }, [path]);
 
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   return {
     error,
     data,
     isLoading,
+    refetch: fetchData,
   };
 };

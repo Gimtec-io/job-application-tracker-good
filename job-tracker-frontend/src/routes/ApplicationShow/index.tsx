@@ -1,36 +1,53 @@
 import { Anchor, Box, Button, Heading, Layer, Text } from 'grommet';
 import { useState } from 'react';
-import { ApplicationStatus } from './components/ApplicationStatus';
+import { useParams } from 'react-router';
+import { useQuery } from '../../hooks/useQuery';
+import { Application, ApplicationStatus } from '../../models/applications';
+import { ApplicationStatuSelector } from './components/ApplicationStatus';
 import { NewApplicationComment } from './components/NewApplicationComment';
 
-const application = {
-  id: '01',
-  company: 'Google',
-  position: 'Rockstar developer',
-  applicationDate: '2021-10-15T06:10:18.150Z',
-  description: 'DO whatever you want and we pay.',
-  link: 'https://www.gimtec.io/',
-  status: {
-    id: '13',
-    content: 'Offer'
-  },
-  // Should already come sorted from backend, newest first
-  comments: [
-    { createdAt: '2021-10-12T06:10:18.150Z', content: 'Amazing offer, that was easy', id: '12' },
-    { createdAt: '2021-10-10T06:10:18.150Z', content: 'Onsite interview was easy', id: '11' },
-    { createdAt: '2021-10-05T06:10:18.150Z', content: 'Technical phone call was fast and sweet', id: '10' },
-  ]
-}
+type Params = {
+  slug: string;
+};
 
 export const ApplicationShow = () => {
   const [showDescription, setShowDescription] = useState(false);
+  const { slug } = useParams<Params>();
+  const { data: application, error, isLoading, refetch } = useQuery<Application>(`/applications/${slug}`);
+
   const closeDescriptionModal = () => setShowDescription(false);
   const openDescriptionModal = () => setShowDescription(true);
+
+  // PENDING useMutation
+  const handleChangeStatus = async (newStatus: ApplicationStatus) => {
+    const response = await fetch(`http://localhost:8000/applications/${application!.id}`, {
+      method: 'PATCH',
+      headers: new Headers({
+        'Content-type': 'application/json',
+      }),
+      body: JSON.stringify({
+        ...application,
+        status: newStatus,
+      }),
+    });
+    if (response.ok) {
+      refetch();
+    }
+  }
+
+  if (error) {
+    return <div>Error</div>;
+  }
+
+  if (isLoading || !application) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Heading level="2">{ `${application.position} @ ${application.company}` }</Heading>
       <Text>
-        { `Application sent ${new Date(application.applicationDate).toLocaleDateString()}` }
+        { `Application sent ${new Date(application.createdAt).toLocaleDateString()}` }
       </Text>
       <Box margin={ { vertical: 'small' } } direction="row" gap="small">
         <Anchor href={ application.link } label="Link to application" target="_blank" />
@@ -51,13 +68,16 @@ export const ApplicationShow = () => {
           )
         }
       </Box>
-      <ApplicationStatus />
+      <ApplicationStatuSelector
+        status={ application.status }
+        onChangeStatus={ handleChangeStatus }
+      />
       <Box>
         <Heading level="3">Comments</Heading>
         <NewApplicationComment />
         <Box margin={ { top: 'medium' } }>
           {
-            application.comments.map((comment) => (
+            application.comments && application.comments.map((comment) => (
               <Box key={ comment.id } margin="small">
                 <Text>
                   { comment.content }

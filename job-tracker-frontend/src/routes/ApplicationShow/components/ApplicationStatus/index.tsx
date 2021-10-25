@@ -1,80 +1,89 @@
 import { Box, Form, FormField, Select } from 'grommet';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useQuery } from '../../../../hooks/useQuery';
+import { ApplicationStatus } from '../../../../models/applications';
 
 // the prefix name of the Create option entry
 const prefix = 'Create';
 const newStatusId = '0';
 
-type Option = {
-  id: string,
-  name: string,
-  text?: string,
+type Option = ApplicationStatus & {
+  text?: string;
 }
 
-const defaultOptions: Option[] = [
-  { id: '1', name: 'Option 1' },
-  { id: '2', name: 'Option 2' },
-];
-
-const updateCreateOption = (text: string) => {
-  const len = defaultOptions.length;
-  if (defaultOptions[len - 1].name.includes(prefix)) {
-    // remove Create option before adding an updated one
-    defaultOptions.pop();
-  }
-  defaultOptions.push({
-    name: `${prefix} '${text}'`,
-    text,
-    id: newStatusId,
-  });
-};
+type Props = {
+  status: ApplicationStatus;
+  onChangeStatus: (newStatus: ApplicationStatus) => void;
+}
 
 type FormState = {
   status: Option,
 };
 
-export const ApplicationStatus = () => {
-  const [state, setState] = useState<FormState | undefined>();
-  const [options, setOptions] = useState(defaultOptions);
+export const ApplicationStatuSelector = (props: Props) => {
+  const [options, setOptions] = useState<Option[]>([]);
+  const { data: statuses, error, isLoading, refetch } = useQuery<ApplicationStatus[]>('/statuses');
+
+  useEffect(() => {
+    if (statuses) {
+      setOptions(statuses);
+    }
+  }, [statuses]);
+
+  useEffect(() => {
+    // Need to refectch statuses in case a new one has been created
+    refetch();
+  }, [props.status.id, refetch])
 
   const searchOrCreateStatus = (text: string) => {
-    updateCreateOption(text);
-    setOptions(defaultOptions.filter((option) => option.name.indexOf(text) > -1));
+    const len = options.length;
+    let newOptions = [...options];
+    if (options[len - 1].content.includes(prefix)) {
+      // remove Create option before adding an updated one
+      newOptions.pop();
+    }
+    newOptions.push({
+      content: `${prefix} '${text}'`,
+      text,
+      id: newStatusId,
+    });
+    // Filter by `text`
+    setOptions(newOptions.filter((option) => option.content.indexOf(text) > -1));
   }
-  const changeStatus = ({ status: newStatus }: FormState) => {
-    // If the selected option is the `Create ${...}`
-    if (newStatus.id === newStatusId && newStatus.text) {
-      // create status in backend
-      // update application
-      // remove last option: `Create ${...}` from options array
-      options.pop();
-      // add new status
-      const newOptions = options.concat({ id: newStatus.id, name: newStatus.text });
-      // set new state
-      setOptions(newOptions)
-      setState({
-        status: {
-          name: newStatus.text,
-          id: newStatus.id,
-        }
+
+  const changeStatus = async ({ status: newStatusData }: FormState) => {
+    if (newStatusData.id === newStatusId) {
+      // We need to get the text without the "Create ..."
+      props.onChangeStatus({
+        id: newStatusId,
+        content: newStatusData.text!,
       });
     } else {
-      setState({
-        status: newStatus,
-      });
+      props.onChangeStatus(newStatusData);
     }
   }
+
+  if (error) {
+    return <div>Error</div>;
+  }
+
+  if (isLoading || !statuses) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <Box width="small">
+    <Box width="medium">
       <Form
-        value={ state }
+        value={ {
+          status: props.status,
+        } }
         onChange={ changeStatus }
       >
         <FormField name="status">
           <Select
             name="status"
             options={ options }
-            labelKey="name"
+            labelKey="content"
             valueKey="id"
             onSearch={ searchOrCreateStatus }
           />
