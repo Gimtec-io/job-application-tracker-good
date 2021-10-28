@@ -1,6 +1,7 @@
 const express = require('express');
 const Application = require('../../libraries/db/Application');
 const Status = require('../../libraries/db/Status');
+const Logger = require('../../libraries/Logger');
 
 const router = express.Router();
 
@@ -82,7 +83,7 @@ router.patch('/:id', async (req, res) => {
     application.setStatus(status);
     res.json(application);
   } catch (error) {
-    console.error(error);
+    Logger.logError('Error creating application', error);
     // We rely on custom errors
     res.status(error.status || 400).json(error.message || 'Error creating application');
   }

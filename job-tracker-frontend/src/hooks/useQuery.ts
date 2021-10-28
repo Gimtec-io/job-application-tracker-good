@@ -51,8 +51,9 @@ export const useAPI = <R>(path: string, { method, onCompleted }: Options = { met
         }
       })
       .catch((error) => {
+        // Maybe also use a central logger for frontend errors
         console.error(`Error querying ${path}`);
-        console.error(path);
+        console.error(error);
         setError(`Error making request to ${path}`);
         setLoading(false);
       })

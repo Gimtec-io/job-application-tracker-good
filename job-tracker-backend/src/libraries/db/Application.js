@@ -1,5 +1,6 @@
 const { v4 } = require('uuid');
 const { CustomError } = require('../errors');
+const Logger = require('../Logger');
 const { slugify } = require('../utils');
 const Comment = require('./Comment');
 const db = require('./db');
@@ -87,8 +88,7 @@ class Application {
       newApplication.setStatus(defaultStatus);
       return newApplication;
     } catch (error) {
-      console.error('Error creating application');
-      console.error(error);
+      Logger.logError('Error creating application in DB', error);
       // We suppose an error with the DB
       throw new CustomError('Sorry, application could not be created. Try again in a few moments.', 500);;
     }
@@ -140,8 +140,7 @@ class Application {
       this.description = description;
       this.statusId = statusId;
     } catch (error) {
-      console.error('Error updating application');
-      console.error(error);
+      Logger.logError('Error updating application in DB', error);
       // We suppose an error with the DB
       throw new CustomError('Sorry, application could not be updated. Try again in a few moments.', 500);;
     }
