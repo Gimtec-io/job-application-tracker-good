@@ -27,7 +27,7 @@ export const ApplicationForm = ({ onSubmit, isLoading }: Props) => {
   const createNewApplication = (data: FormExtendedEvent<ApplicationFormState, Element>) => {
     onSubmit(data.value);
   }
-  // It's always nice to learn to use forms with a library
+
   return (
     <Form
       value={ value }

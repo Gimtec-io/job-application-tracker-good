@@ -40,6 +40,9 @@ DO NOT UNDERESTIMATE the value of repetition. Build CRUD apps until you feel com
 
 Avoid carets in package versions to make sure the versions are what you expect.
 
+It's always nice to learn to use forms with a library.
+It's nice to learn how to use a UI framework. Avoids spending time searching docs on how to do trivial things.
+
 ## Bonus features to be added later
 
 Add markdown or WYSIWYW for job description
