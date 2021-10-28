@@ -4,7 +4,9 @@ import { useParams } from 'react-router';
 import { AnchorLink } from '../../components/AnchorLink';
 import { useQuery } from '../../hooks/useQuery';
 import { Application, ApplicationStatus } from '../../models/applications';
+import { sortNewestByCreatedAt } from '../../utils/sortByCreatedAt';
 import { ApplicationStatuSelector } from './components/ApplicationStatus';
+import { Comment } from './components/Comment';
 import { NewApplicationComment } from './components/NewApplicationComment';
 
 type Params = {
@@ -33,6 +35,25 @@ export const ApplicationShow = () => {
     });
     if (response.ok) {
       refetch();
+    }
+  }
+
+  // PENDING useMutation
+  const createComment = async (content: string) => {
+    if (application) {
+      const response = await fetch('http://localhost:8000/comments', {
+        method: 'POST',
+        headers: new Headers({
+          'Content-type': 'application/json',
+        }),
+        body: JSON.stringify({
+          content,
+          applicationId: application!.id,
+        }),
+      });
+      if (response.ok) {
+        refetch();
+      }
     }
   }
 
@@ -76,18 +97,11 @@ export const ApplicationShow = () => {
       />
       <Box>
         <Heading level="3">Comments</Heading>
-        <NewApplicationComment />
+        <NewApplicationComment onSubmit={ createComment } />
         <Box margin={ { top: 'medium' } }>
           {
-            application.comments && application.comments.map((comment) => (
-              <Box key={ comment.id } margin="small">
-                <Text>
-                  { comment.content }
-                </Text>
-                <Text size="small">
-                  { new Date(comment.createdAt).toLocaleDateString() }
-                </Text>
-              </Box>
+            application.comments && application.comments.sort(sortNewestByCreatedAt).map((comment) => (
+              <Comment key={ comment.id } comment={ comment } />
             ))
           }
         </Box>
