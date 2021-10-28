@@ -1,8 +1,8 @@
 import { Anchor, Box, Button, Heading, Layer, Text } from 'grommet';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { AnchorLink } from '../../components/AnchorLink';
-import { useQuery } from '../../hooks/useQuery';
+import { useAPI } from '../../hooks/useQuery';
 import { Application, ApplicationStatus } from '../../models/applications';
 import { sortNewestByCreatedAt } from '../../utils/sortByCreatedAt';
 import { ApplicationStatuSelector } from './components/ApplicationStatus';
@@ -16,44 +16,30 @@ type Params = {
 export const ApplicationShow = () => {
   const [showDescription, setShowDescription] = useState(false);
   const { slug } = useParams<Params>();
-  const { data: application, error, isLoading, refetch } = useQuery<Application>(`/applications/${slug}`);
+  const [getApplication, { data: application, error, isLoading }] = useAPI<Application>(`/applications/${slug}`);
+  const [createCommentRequest] = useAPI('/comments', { method: 'POST', onCompleted: getApplication });
+  const [updateApplication] = useAPI(`/applications/${application?.id}`, { method: 'PATCH', onCompleted: getApplication });
 
   const closeDescriptionModal = () => setShowDescription(false);
   const openDescriptionModal = () => setShowDescription(true);
 
-  // PENDING useMutation
+  useEffect(() => {
+    getApplication();
+  }, [getApplication]);
+
   const handleChangeStatus = async (newStatus: ApplicationStatus) => {
-    const response = await fetch(`http://localhost:8000/applications/${application!.id}`, {
-      method: 'PATCH',
-      headers: new Headers({
-        'Content-type': 'application/json',
-      }),
-      body: JSON.stringify({
-        ...application,
-        status: newStatus,
-      }),
+    updateApplication({
+      ...application,
+      status: newStatus,
     });
-    if (response.ok) {
-      refetch();
-    }
   }
 
-  // PENDING useMutation
   const createComment = async (content: string) => {
     if (application) {
-      const response = await fetch('http://localhost:8000/comments', {
-        method: 'POST',
-        headers: new Headers({
-          'Content-type': 'application/json',
-        }),
-        body: JSON.stringify({
-          content,
-          applicationId: application!.id,
-        }),
+      createCommentRequest({
+        content,
+        applicationId: application!.id,
       });
-      if (response.ok) {
-        refetch();
-      }
     }
   }
 

@@ -16,9 +16,10 @@ const dateFormat = localDateFormat();
 
 type Props = {
   onSubmit: (data: ApplicationFormState) => void;
+  isLoading: boolean;
 };
 
-export const ApplicationForm = ({ onSubmit }: Props) => {
+export const ApplicationForm = ({ onSubmit, isLoading }: Props) => {
   const [value, setValue] = useState<ApplicationFormState>({ company: '', link: '', position: '', description: '', date: undefined });
 
   // Libraries do not always have the best docs
@@ -73,7 +74,7 @@ export const ApplicationForm = ({ onSubmit }: Props) => {
           placeholder="Add the job description for future reference"
         />
       </FormField>
-      <Button type="submit" label="Create" primary />
+      <Button type="submit" label="Create" primary disabled={ isLoading } />
     </Form>
   );
 };

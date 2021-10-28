@@ -15,7 +15,11 @@ export const ApplicationsList = ({ applications }: Props) => {
         (application: Application) => <Text key={ `status-${application.id}` } weight="bold">{ application.status.content }</Text>
       }
       secondaryKey={
-        (application: Application) => <Text key={ `title-${application.id}` }>{ `${application.company} - ${application.position}` }</Text>
+        (application: Application) => (
+          <Text key={ `title-${application.id}` }>
+            { `${application.position} @ ${application.company}` }
+          </Text>
+        )
       }
       onClickItem={
         ({ item }: { item?: Application }) => {

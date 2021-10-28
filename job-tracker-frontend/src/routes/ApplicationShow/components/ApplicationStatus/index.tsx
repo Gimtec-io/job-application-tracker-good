@@ -1,6 +1,6 @@
 import { Box, Form, FormField, Select } from 'grommet';
 import { useEffect, useState } from 'react';
-import { useQuery } from '../../../../hooks/useQuery';
+import { useAPI } from '../../../../hooks/useQuery';
 import { ApplicationStatus } from '../../../../models/applications';
 
 // the prefix name of the Create option entry
@@ -22,7 +22,7 @@ type FormState = {
 
 export const ApplicationStatuSelector = (props: Props) => {
   const [options, setOptions] = useState<Option[]>([]);
-  const { data: statuses, error, isLoading, refetch } = useQuery<ApplicationStatus[]>('/statuses');
+  const [ getStatuses, { data: statuses, error, isLoading }] = useAPI<ApplicationStatus[]>('/statuses');
 
   useEffect(() => {
     if (statuses) {
@@ -31,9 +31,9 @@ export const ApplicationStatuSelector = (props: Props) => {
   }, [statuses]);
 
   useEffect(() => {
+    getStatuses();
     // Need to refectch statuses in case a new one has been created
-    refetch();
-  }, [props.status.id, refetch])
+  }, [props.status.id, getStatuses])
 
   const searchOrCreateStatus = (text: string) => {
     const len = options.length;

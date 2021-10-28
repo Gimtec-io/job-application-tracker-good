@@ -46,6 +46,8 @@ Add markdown or WYSIWYW for job description
 Add tag to each comment to then show all the comments with the same tag.
 Add modified at
 Add the date that the status changed.
+Add notifications when success happens
+Loading UI
 
 ## Application New Page
 

@@ -1,11 +1,16 @@
 import { Box } from 'grommet';
+import { useEffect } from 'react';
 import { AnchorLink } from '../../components/AnchorLink';
-import { useQuery } from '../../hooks/useQuery';
+import { useAPI } from '../../hooks/useQuery';
 import { Application } from '../../models/applications';
 import { ApplicationsList } from './components/ApplicationsList';
 
 export const Home = () => {
-  const { data: applications, error, isLoading } = useQuery<Application[]>('/applications');
+  const [getApplications, { data: applications, error, isLoading }] = useAPI<Application[]>('/applications');
+
+  useEffect(() => {
+    getApplications();
+  }, [getApplications]);
   
   if (error) {
     return <div>Error</div>;

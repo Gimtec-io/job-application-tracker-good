@@ -1,23 +1,40 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
-type ReturnValue<T> = {
+type Info<T> = {
   data?: T,
   error?: string,
   isLoading: boolean,
-  refetch: () => void;
+};
+
+type ReturnValue<T> = [
+  (body?: any) => void,
+  Info<T>,
+];
+
+type Options = {
+  method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
+  onCompleted?: () => void,
 };
 
 const baseUrl = 'http://localhost:8000';
 
 // Following the Apollo client pattern
-// https://www.apollographql.com/docs/react/api/react/hooks/#usequery
-export const useQuery = <R>(path: string): ReturnValue<R> => {
+// https://www.apollographql.com/docs/react/api/react/hooks/#useMutation
+// We centralize the business logic of baseUrl, managing errors, loading states, etc
+export const useAPI = <R>(path: string, { method, onCompleted }: Options = { method: 'GET' }): ReturnValue<R> => {
   const [data, setData] = useState<R | undefined>();
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
 
-  const fetchData = useCallback(async () => {
-    fetch(`${baseUrl}${path}`)
+  const makeRequest = useCallback(async (body?: any) => {
+    setLoading(true);
+    fetch(`${baseUrl}${path}`, {
+      method: method || 'GET',
+      headers: new Headers({
+        'Content-type': 'application/json',
+      }),
+      body: body ? JSON.stringify(body) : undefined,
+    })
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -29,6 +46,9 @@ export const useQuery = <R>(path: string): ReturnValue<R> => {
       .then((responseBody) => {
         setData(responseBody as R);
         setLoading(false);
+        if (onCompleted) {
+          onCompleted();
+        }
       })
       .catch((error) => {
         console.error(`Error querying ${path}`);
@@ -36,16 +56,14 @@ export const useQuery = <R>(path: string): ReturnValue<R> => {
         setError(`Error making request to ${path}`);
         setLoading(false);
       })
-  }, [path]);
+  }, [path, method, onCompleted]);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  return {
-    error,
-    data,
-    isLoading,
-    refetch: fetchData,
-  };
+  return [
+    makeRequest,
+      {
+      error,
+      data,
+      isLoading,
+    }
+  ];
 };
