@@ -9,7 +9,7 @@ type FormState = {
   comment: string,
 };
 
-export const NewApplicationComment = ({ onSubmit }: Props) => {
+export const CommentNew = ({ onSubmit }: Props) => {
   const [value, setValue] = useState<FormState>({ comment: '' });
   const createNewComment = async (data: FormExtendedEvent<FormState, Element>) => {
     await onSubmit(data.value.comment);

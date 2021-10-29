@@ -1,7 +1,7 @@
 import { Box, Form, FormField, Select } from 'grommet';
 import { useEffect, useState } from 'react';
-import { useAPI } from '../../../../hooks/useQuery';
-import { ApplicationStatus } from '../../../../models';
+import { useAPI } from '../../../hooks/useQuery';
+import { ApplicationStatus } from '../../../models';
 
 // the prefix name of the Create option entry
 const prefix = 'Create';

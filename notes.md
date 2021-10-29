@@ -46,6 +46,8 @@ Leave yourself at least 1-2h at the end to ONLY play as a user with the app and 
 
 Explain what each folder holds.
 
+Readable render function of the route components
+
 ## Bonus features to be added later
 
 Add markdown or WYSIWYW for job description
