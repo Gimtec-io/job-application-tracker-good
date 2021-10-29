@@ -1,5 +1,5 @@
 const { v4 } = require('uuid');
-const db = require('./db');
+const db = require('../../libraries/db');
 
 // Static methods should return a Comment instance
 class Comment {

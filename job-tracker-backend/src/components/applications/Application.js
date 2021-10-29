@@ -1,10 +1,10 @@
 const { v4 } = require('uuid');
-const { CustomError } = require('../errors');
-const Logger = require('../Logger');
-const { slugify } = require('../utils');
-const Comment = require('./Comment');
-const db = require('./db');
-const Status = require('./Status');
+const { CustomError } = require('../../libraries/errors');
+const Logger = require('../../libraries/Logger');
+const { slugify } = require('../../libraries/utils');
+const Comment = require('../comments/Comment');
+const db = require('../../libraries/db');
+const Status = require('../statuses/Status');
 
 // Static methods should return an Application instance
 class Application {
@@ -28,7 +28,6 @@ class Application {
     const application = new Application(applicationData);
     const status = await Status.getById(application.statusId);
     application.setStatus(status);
-    // TODO: add comments
     const comments = await Comment.getByApplicationId(application.id);
     application.setComments(comments);
     return application;
@@ -50,7 +49,7 @@ class Application {
   static async createNewSlug(company, position, index) {
     const companySlug = slugify(company);
     const positionSlug = slugify(position);
-    // index is used in case there is the same application for company and position
+    // EDGE CASE: `index` is used when there is the same application for company and position
     const newSlug = index === undefined ? `${companySlug}-${positionSlug}` : `${companySlug}-${positionSlug}-${index}`;
     const application = await db.applications.getBySlug(newSlug);
     if (application) {
@@ -62,7 +61,7 @@ class Application {
   }
 
   static async create({ company, position, link, description, createdAt }) {
-    // Manual check. This can be done with a library
+    // Manual check. This could be done with a library
     if (!company || !position) {
       // Status 422: Unprocessable Entity
       // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422
@@ -71,6 +70,7 @@ class Application {
     try {
       const defaultStatus = await Status.defaultStatus();
       const slug = await Application.createNewSlug(company, position);
+      // We could check format of createdAt and link for example.
       const newApplicationData = {
         id: v4(),
         company,
@@ -79,8 +79,8 @@ class Application {
         link,
         description,
         statusId: defaultStatus.id,
-        // We could check format of createdAt
-        // We are expecting an ISO String at UTC.
+        // Dates are tricky. Make sure you always represent a date the same way.
+        // In this app, it's always an ISO String in UTC.
         createdAt,
       }
       await db.applications.create(newApplicationData);

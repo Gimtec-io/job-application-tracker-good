@@ -1,5 +1,5 @@
 const express = require('express');
-const Comment = require('../../libraries/db/Comment');
+const Comment = require('./Comment');
 
 const router = express.Router();
 

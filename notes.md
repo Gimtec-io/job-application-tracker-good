@@ -42,6 +42,7 @@ Avoid carets in package versions to make sure the versions are what you expect.
 
 It's always nice to learn to use forms with a library.
 It's nice to learn how to use a UI framework. Avoids spending time searching docs on how to do trivial things.
+Leave yourself at least 1-2h at the end to ONLY play as a user with the app and read all the files.
 
 ## Bonus features to be added later
 

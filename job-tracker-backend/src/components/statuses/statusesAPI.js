@@ -1,5 +1,5 @@
 const express = require('express');
-const Status = require('../../libraries/db/Status');
+const Status = require('./Status');
 
 const router = express.Router();
 

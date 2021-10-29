@@ -1,6 +1,6 @@
 const express = require('express');
-const Application = require('../../libraries/db/Application');
-const Status = require('../../libraries/db/Status');
+const Application = require('./Application');
+const Status = require('../statuses/Status');
 const Logger = require('../../libraries/Logger');
 
 const router = express.Router();
@@ -37,7 +37,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get one
+// Get one by slug
 router.get('/:slug', async (req, res) => {
   try {
     const application = await Application.getBySlug(req.params.slug);
