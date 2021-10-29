@@ -59,9 +59,9 @@ export const ApplicationShow = () => {
         { `Application sent ${new Date(application.createdAt).toLocaleDateString()}` }
       </Text>
       <Box margin={ { vertical: 'small' } } direction="row" gap="small">
-        <Anchor href={ application.link } label="Link to application" target="_blank" />
-        <Text>-</Text>
-        <Button plain onClick={ openDescriptionModal }>Open description</Button>
+        { application.link && <Anchor href={ application.link } label="Link to application" target="_blank" /> }
+        { application.link && <Text>-</Text> }
+        { application.description && <Button plain onClick={ openDescriptionModal }>Open description</Button> }
         {
           showDescription &&
           (

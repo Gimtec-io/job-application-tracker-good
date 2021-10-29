@@ -51,10 +51,10 @@ export const ApplicationForm = ({ onSubmit, isLoading }: Props) => {
         />
       </FormField>
       <Box width="medium">
-        <FormField label="Application date" name="date" htmlFor="date" required>
+        <FormField label="Application date" name="createdAt" htmlFor="createdAt" required>
           <DateInput
-            id="date"
-            name="date"
+            id="createdAt"
+            name="createdAt"
             format={ dateFormat }
           />
         </FormField>
