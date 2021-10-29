@@ -1,5 +1,5 @@
 import { Box, Text } from 'grommet';
-import { Comment as CommentType } from '../../../models/applications';
+import { Comment as CommentType } from '../../../models';
 
 type Props = {
   comment: CommentType;

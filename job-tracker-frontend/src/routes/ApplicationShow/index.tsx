@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { AnchorLink } from '../../components/AnchorLink';
 import { useAPI } from '../../hooks/useQuery';
-import { Application, ApplicationStatus } from '../../models/applications';
+import { Application, ApplicationStatus } from '../../models';
 import { sortNewestByCreatedAt } from '../../utils/sortNewestByCreatedAt';
 import { ApplicationStatuSelector } from './components/ApplicationStatus';
 import { Comment } from './components/Comment';

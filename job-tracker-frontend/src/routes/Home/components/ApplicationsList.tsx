@@ -1,6 +1,6 @@
 import { List, Text } from 'grommet';
 import { useHistory } from 'react-router';
-import { Application } from '../../../models/applications';
+import { Application } from '../../../models';
 
 type Props = {
   applications: Application[];

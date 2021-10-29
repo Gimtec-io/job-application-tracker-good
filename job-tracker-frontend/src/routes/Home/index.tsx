@@ -2,7 +2,7 @@ import { Box } from 'grommet';
 import { useEffect } from 'react';
 import { AnchorLink } from '../../components/AnchorLink';
 import { useAPI } from '../../hooks/useQuery';
-import { Application } from '../../models/applications';
+import { Application } from '../../models';
 import { ApplicationsList } from './components/ApplicationsList';
 
 export const Home = () => {
