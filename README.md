@@ -47,6 +47,12 @@ Then, in parallel, in another terminal tab, run the frontend:
 
 **Visit [Localhost 3000](http://localhost:3000/) to see it in action.**
 
+### Database
+
+The project does not rely on any database, instead it persists the data in JSON files.
+
+The repository already comes populated with data. To repopulate go to the "job-tracker-backend" folder and run `npm run db:populate`.
+
 ## Screenshots
 
 ![Home Page](images/tracker-home.png)
