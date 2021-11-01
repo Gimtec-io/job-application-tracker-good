@@ -15,7 +15,19 @@ There are two main folders.
 * "job-tracker-backend" is the api project built with [Express](https://expressjs.com/).
 * "job-tracker-frontend" is the frontend project built with [create-react-app](https://reactjs.org/docs/create-a-new-react-app.html).
 
+For more details on the structure of the project and the decisions go to [ARCHITECTURE.md](./ARCHITECTURE.md).
+
+### Main libraries
+
+The backend is a raw Express project. Only complementary libraries like [cors](https://www.npmjs.com/package/cors) and [body-parser](https://www.npmjs.com/package/body-parser) have been used. For the creationg or ids I have used [uuid](https://www.npmjs.com/package/uuid).
+
+The frontend is a project built with [create-react-app](https://reactjs.org/docs/create-a-new-react-app.html). I used the typescript variation to add an extra layer of testing with types. [Grommet](https://v2.grommet.io/) is used as the UI framework, which also requires [styled-components](https://www.styled-components.com/) even though I didn't use it directly.
+
+For frontend routing I used [react-router-dom](https://reactrouter.com/web/guides/quick-start) and I relied on React state instead of adding a specific state management library.
+
 ### Setup
+
+Requirement: Node version older than v12.
 
 Go into each folder and run `npm install`.
 
