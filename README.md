@@ -19,7 +19,7 @@ For more details on the structure of the project and the decisions go to [ARCHIT
 
 ### Main libraries
 
-The backend is a raw Express project. Only complementary libraries like [cors](https://www.npmjs.com/package/cors) and [body-parser](https://www.npmjs.com/package/body-parser) have been used. For the creationg or ids I have used [uuid](https://www.npmjs.com/package/uuid).
+The backend is a raw Express project. I also used common complementary libraries like [cors](https://www.npmjs.com/package/cors), [uuid](https://www.npmjs.com/package/uuid) and [body-parser](https://www.npmjs.com/package/body-parser).
 
 The frontend is a project built with [create-react-app](https://reactjs.org/docs/create-a-new-react-app.html). I used the typescript variation to add an extra layer of testing with types. [Grommet](https://v2.grommet.io/) is used as the UI framework, which also requires [styled-components](https://www.styled-components.com/) even though I didn't use it directly.
 
