@@ -14,7 +14,7 @@ type Params = {
 
 export const ApplicationShow = () => {
   const { slug } = useParams<Params>();
-  const [getApplication, { data: application, error, isLoading }] = useAPI<Application>(`/applications/${slug}`);
+  const [getApplication, { data: application, error }] = useAPI<Application>(`/applications/${slug}`);
   const [createCommentRequest] = useAPI('/comments', { method: 'POST', onCompleted: getApplication });
   const [updateApplication] = useAPI(`/applications/${application?.id}`, { method: 'PATCH', onCompleted: getApplication });
 
@@ -42,7 +42,10 @@ export const ApplicationShow = () => {
     return <div>Error</div>;
   }
 
-  if (isLoading || !application) {
+  // `isLoading` is also `true` when refetching after updating
+  // ideally we would manage separatelly the case when `isLoading === false` and we don't have `application`
+  // that is an edge case
+  if (!application) {
     return <div>Loading...</div>;
   }
 

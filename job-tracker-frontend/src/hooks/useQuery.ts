@@ -28,35 +28,30 @@ export const useAPI = <R>(path: string, { method, onCompleted }: Options = { met
 
   const makeRequest = useCallback(async (body?: any) => {
     setLoading(true);
-    fetch(`${baseUrl}${path}`, {
-      method: method || 'GET',
-      headers: new Headers({
-        'Content-type': 'application/json',
-      }),
-      body: body ? JSON.stringify(body) : undefined,
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          setError(`Error making request to ${path}`);
-          setLoading(false);
-        }
-      })
-      .then((responseBody) => {
-        setData(responseBody as R);
-        setLoading(false);
-        if (onCompleted) {
-          onCompleted();
-        }
-      })
-      .catch((error) => {
-        // Maybe also use a central logger for frontend errors
-        console.error(`Error querying ${path}`);
-        console.error(error);
-        setError(`Error making request to ${path}`);
-        setLoading(false);
-      })
+    try {
+      const response = await fetch(`${baseUrl}${path}`, {
+        method: method || 'GET',
+        headers: new Headers({
+          'Content-type': 'application/json',
+        }),
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      if (!response.ok) {
+        throw new Error(`Error making request to ${path} with status: ${response.status}`);
+      }
+      const responseBody = await response.json();
+      setData(responseBody as R);
+      if (onCompleted) {
+        onCompleted();
+      }
+    } catch (error) {
+      // Maybe also use a central logger for frontend errors
+      console.error(`Error querying ${path}`);
+      console.error(error);
+      setError(`Error making request to ${path}`);
+    } finally {
+      setLoading(false);
+    }
   }, [path, method, onCompleted]);
 
   return [

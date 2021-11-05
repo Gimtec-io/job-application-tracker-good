@@ -22,7 +22,7 @@ type FormState = {
 
 export const ApplicationStatuSelector = (props: Props) => {
   const [options, setOptions] = useState<Option[]>([]);
-  const [ getStatuses, { data: statuses, error, isLoading }] = useAPI<ApplicationStatus[]>('/statuses');
+  const [ getStatuses, { data: statuses, error }] = useAPI<ApplicationStatus[]>('/statuses');
 
   useEffect(() => {
     if (statuses) {
@@ -67,7 +67,7 @@ export const ApplicationStatuSelector = (props: Props) => {
     return <div>Error</div>;
   }
 
-  if (isLoading || !statuses) {
+  if (!statuses) {
     return <div>Loading...</div>;
   }
 
