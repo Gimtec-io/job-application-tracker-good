@@ -1,5 +1,6 @@
 const { v4 } = require('uuid');
 const db = require('../../libraries/db');
+const { CustomError } = require('../../libraries/errors');
 
 // Static methods should return a Comment instance
 class Comment {
